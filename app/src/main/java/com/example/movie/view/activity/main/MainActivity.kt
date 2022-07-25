@@ -31,9 +31,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         get() = ActivityMainBinding::inflate
 
 
-    override fun onViewBindingCreated(savedInstanceState: Bundle?) {
+    override fun initialization() {
         setupBotNav()
+    }
 
+    override fun observeViewModel() {
+//        TODO("Not yet implemented")
     }
 
     private fun setupBotNav() {
@@ -69,6 +72,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         fm.beginTransaction().hide(defaultFragment).show(fragment).commit()
         defaultFragment = fragment
     }
+
+
 
 
 }

@@ -1,15 +1,16 @@
 package com.example.movie.view.fragment.home.viewpager
 
-import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.widget.Toast
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.movie.R
 import com.example.movie.base.BaseFragment
 import com.example.movie.base.NetworkResult
 import com.example.movie.databinding.FragmentMovieBinding
+import com.example.movie.helper.showToast
 import com.example.movie.view.fragment.home.HomeAdapter
 import com.example.movie.view.fragment.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,8 +21,6 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
     private val viewModel: HomeViewModel by viewModels()
     var page = 1
 
-//    private lateinit var nowplayingAdapter: HomeAdapter
-
     private val nowplayingAdapter = HomeAdapter()
     private val topratedAdapter = HomeAdapter()
     private val popularAdapter = HomeAdapter()
@@ -29,7 +28,7 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
     override val bindingInflater: (LayoutInflater) -> FragmentMovieBinding
         get() = FragmentMovieBinding::inflate
 
-    override fun onViewBindingCreated(savedInstanceState: Bundle?) {
+    override fun initialization() {
         setupView()
     }
 
@@ -41,16 +40,20 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
                     val data = response.data?.results
                     if (!data.isNullOrEmpty()) {
                         nowplayingAdapter.addData(data)
+                        binding.layoutNowPlaying.apply {
+                            shimmerPoster.root.visibility = GONE
+                            rvPoster.visibility = VISIBLE
+                        }
                     } else
                         Log.e("rvKosong", "getMovie: $data")
                 }
                 is NetworkResult.Error -> {
                     response.message?.getContentIfNotHandled()?.let {
-                        //Toast
+                       showToast(view?.context, it)
                     }
                 }
                 is NetworkResult.Loading -> {
-                    Log.e("shimmer", "getMovie: shimer")
+                    binding.layoutNowPlaying.shimmerPoster.root.startShimmerAnimation()
                 }
             }
         }
@@ -62,7 +65,19 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
                     val data = response.data?.results
                     if (!data.isNullOrEmpty()) {
                         topratedAdapter.addData(data)
+                        binding.layoutTopRated.apply {
+                            shimmerPoster.root.visibility = GONE
+                            rvPoster.visibility = VISIBLE
+                        }
                     }
+                }
+                is NetworkResult.Error -> {
+                    response.message?.getContentIfNotHandled()?.let {
+                        showToast(view?.context, it)
+                    }
+                }
+                is NetworkResult.Loading -> {
+                    binding.layoutTopRated.shimmerPoster.root.startShimmerAnimation()
                 }
             }
         }
@@ -74,41 +89,43 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
                     val data = response.data?.results
                     if (!data.isNullOrEmpty()) {
                         popularAdapter.addData(data)
+                        binding.layoutPopular.apply {
+                            showToast(view?.context, "$data")
+                            shimmerPoster.root.visibility = GONE
+                            rvPoster.visibility = VISIBLE
+                        }
                     }
+                }
+                is NetworkResult.Error -> {
+                    response.message?.getContentIfNotHandled()?.let {
+                        showToast(view?.context, it)
+                    }
+                }
+                is NetworkResult.Loading -> {
+                    binding.layoutPopular.shimmerPoster.root.startShimmerAnimation()
                 }
             }
         }
 
     }
 
-    override fun getDataFromIntent() {
-//        TODO("Not yet implemented")
-    }
-
     private fun setupView() {
-
-//        popularAdapter.apply {
-//
-//        }
-
-        binding?.layoutNowPlaying?.apply {
-            txtCategory.text = "Now Playing"
+        binding.layoutNowPlaying.apply {
+            txtCategory.text = getString(R.string.movie_category_nowplaying)
             rvPoster.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = nowplayingAdapter
             }
         }
-
-        binding?.layoutTopRated?.apply {
-            txtCategory.text = "Top Rated"
+        binding.layoutTopRated.apply {
+            txtCategory.text = getString(R.string.movie_category_toprated)
             rvPoster.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = topratedAdapter
             }
         }
-
-        binding?.layoutPopular?.apply {
-            txtCategory.text = "Popular"
+        binding.layoutPopular.apply {
+            txtCategory.text = getString(R.string.movie_category_popular)
             rvPoster.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = popularAdapter
@@ -116,6 +133,4 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
         }
 
     }
-
-
 }

@@ -1,14 +1,13 @@
 package com.example.movie.view.fragment.upcoming
 
-import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.Toast
+import android.view.View.*
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.movie.R
 import com.example.movie.base.BaseFragment
 import com.example.movie.base.NetworkResult
 import com.example.movie.databinding.FragmentUpComingBinding
+import com.example.movie.helper.showToast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,9 +22,8 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
     override val bindingInflater: (LayoutInflater) -> FragmentUpComingBinding
         get() = FragmentUpComingBinding::inflate
 
-    override fun onViewBindingCreated(savedInstanceState: Bundle?) {
+    override fun initialization() {
         setupView()
-        setupAdapter()
     }
 
     override fun observeViewModel() {
@@ -36,6 +34,8 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
                     val data = response.data?.results
                     if (!data.isNullOrEmpty()) {
                         upComingAdapter.addData(data)
+                        binding.shimmerUpComing.root.visibility = GONE
+                        binding.rvUpComing.visibility = VISIBLE
                         upComingAdapter.apply {
 //                            addChildClickViewIds(R.id.txtTontonSekarang)
 //                            setOnItemClickListener { _, _, position ->
@@ -46,24 +46,24 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
                         }
                     }
                 }
+                is NetworkResult.Error -> {
+                    response.message?.getContentIfNotHandled()?.let {
+                        showToast(view?.context, it)
+                    }
+                }
+                is NetworkResult.Loading -> {
+                    binding.shimmerUpComing.root.startShimmerAnimation()
+                }
+
             }
 
 
         }
     }
 
-    override fun getDataFromIntent() {
-//        TODO("Not yet implemented")
-    }
-
-    private fun setupAdapter() {
-
-    }
-
     private fun setupView() {
-        binding?.rvUpComing?.apply {
-            layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.rvUpComing.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = upComingAdapter
         }
     }

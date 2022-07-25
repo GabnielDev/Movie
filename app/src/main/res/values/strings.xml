@@ -2,4 +2,14 @@
     <string name="app_name">Movie</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="category.movie">Movie</string>
+    <string name="category.tv">TV</string>
+
+    <string name="movie.category.nowplaying">Now Playing</string>
+    <string name="movie.category.toprated">Top Rated</string>
+    <string name="movie.category.popular">Popular</string>
+
+    <string name="tv.category.airingtoday">Airing Today</string>
+
 </resources>

@@ -9,7 +9,13 @@
         android:id="@+id/rvUpComing"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_upcoming"
-        />
+        android:visibility="gone"
+        tools:listitem="@layout/item_upcoming" />
+
+    <include
+        android:id="@+id/shimmerUpComing"
+        layout="@layout/shimmer_item_upcoming"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
