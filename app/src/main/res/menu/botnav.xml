@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuHome"
+        android:icon="@drawable/ic_home"
+        android:title="Home" />
+    <item
+        android:id="@+id/menuSearch"
+        android:icon="@drawable/ic_search"
+        android:title="Search" />
+    <item
+        android:id="@+id/menuUpcoming"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Comming Soon"/>
+    <item
+        android:id="@+id/menuSave"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Save" />
+    <item
+        android:id="@+id/menuOther"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Other" />
+
+</menu>
