@@ -1,12 +1,16 @@
 package com.example.movie.remote.service
 
 import com.example.movie.remote.response.ResponseMovie
+import com.example.movie.remote.response.ResponseTrailer
+import com.example.movie.remote.response.ResultTrailer
 import com.example.movie.utils.Constants.URL_NOWPLAYING_MOVIE
 import com.example.movie.utils.Constants.URL_POPULAR_MOVIE
 import com.example.movie.utils.Constants.URL_TOPRATED_MOVIE
+import com.example.movie.utils.Constants.URL_TRAILER_MOVIE
 import com.example.movie.utils.Constants.URL_UPCOMING_MOVIE
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieServiceInstance {
@@ -31,9 +35,9 @@ interface MovieServiceInstance {
         @Query("page") page: Int
     ): Response<ResponseMovie>
 
-//    @GET(URL_TRAILER_MOVIE)
-//    suspend fun getSegeraTrailer(
-//        @Path("movie_id") id: Int?
-//    ): Response<MovieTrailer>
+    @GET(URL_TRAILER_MOVIE)
+    suspend fun getTrailerMovie(
+        @Path("movie_id") id: Int?
+    ): Response<ResponseTrailer>
 
 }

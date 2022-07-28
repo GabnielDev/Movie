@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movie.base.NetworkResult
 import com.example.movie.remote.response.ResponseMovie
+import com.example.movie.remote.response.ResponseTrailer
 import com.example.movie.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,6 +24,16 @@ class UpComingViewModel @Inject constructor(
         repository.getUpComingMovie(page)
             .collect {
                 _upComing.value = it
+            }
+    }
+
+    private val _trailer = MutableLiveData<NetworkResult<ResponseTrailer>>()
+    val trailer: LiveData<NetworkResult<ResponseTrailer>> = _trailer
+
+    fun getTrailer(id: Int?) = viewModelScope.launch {
+        repository.getTrailerMovie(id)
+            .collect {
+                _trailer.value = it
             }
     }
 

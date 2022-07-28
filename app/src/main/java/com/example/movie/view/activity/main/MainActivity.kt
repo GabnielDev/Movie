@@ -1,6 +1,5 @@
 package com.example.movie.view.activity.main
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -72,9 +71,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         fm.beginTransaction().hide(defaultFragment).show(fragment).commit()
         defaultFragment = fragment
     }
-
-
-
 
 }
 

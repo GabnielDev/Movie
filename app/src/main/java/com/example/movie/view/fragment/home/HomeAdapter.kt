@@ -7,21 +7,21 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.example.movie.R
 import com.example.movie.databinding.ItemPosterBinding
-import com.example.movie.remote.response.ResultTv
 import com.example.movie.remote.response.ResultsItem
 import com.example.movie.utils.Constants.BASE_URL_POSTER
+import com.example.movie.view.fragment.home.HomeAdapter.ViewHolder
 
 class HomeAdapter
-    : BaseQuickAdapter<ResultsItem, HomeAdapter.HomeViewBinding>
+    : BaseQuickAdapter<ResultsItem, ViewHolder>
     (R.layout.item_poster) {
 
-    override fun convert(holder: HomeViewBinding, item: ResultsItem) {
+    override fun convert(holder: ViewHolder, item: ResultsItem) {
         holder.bindData(item)
         holder.itemView.animation =
             AnimationUtils.loadAnimation(holder.itemView.context, R.anim.transition_animation)
     }
 
-    inner class HomeViewBinding(view: View) : BaseViewHolder(view) {
+    class ViewHolder(view: View) : BaseViewHolder(view) {
         private val binding = ItemPosterBinding.bind(view)
 
         fun bindData(item: ResultsItem) {

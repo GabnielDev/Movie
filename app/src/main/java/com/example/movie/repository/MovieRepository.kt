@@ -4,6 +4,7 @@ import com.example.movie.base.BaseApiResponse
 import com.example.movie.base.NetworkResult
 import com.example.movie.remote.response.ResponseMovie
 import com.example.movie.remote.MovieDataSource
+import com.example.movie.remote.response.ResponseTrailer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -48,6 +49,15 @@ class MovieRepository @Inject constructor(
             emit(NetworkResult.Loading())
             emit(safeApiCall {
                 movieDataSource.getPopularMovie(page)
+            })
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getTrailerMovie(id: Int?): Flow<NetworkResult<ResponseTrailer>> {
+        return flow {
+            emit(NetworkResult.Loading())
+            emit(safeApiCall {
+                movieDataSource.getTrailerMovie(id)
             })
         }.flowOn(Dispatchers.IO)
     }

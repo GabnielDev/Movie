@@ -60,5 +60,35 @@ class HomeViewModel @Inject constructor(
             }
     }
 
+    private val _topratedTv = MutableLiveData<NetworkResult<ResponseTv>>()
+    val topratedTv: LiveData<NetworkResult<ResponseTv>> = _topratedTv
+
+    fun getTopRatedTv(page: Int) = viewModelScope.launch {
+        tvRepository.getTopRatedTv(page)
+            .collect {
+                _topratedTv.value = it
+            }
+    }
+
+    private val _ontheairTv = MutableLiveData<NetworkResult<ResponseTv>>()
+    val ontheairTv: LiveData<NetworkResult<ResponseTv>> = _ontheairTv
+
+    fun getOnTheAirTv(page: Int) = viewModelScope.launch {
+        tvRepository.getOnTheAir(page)
+            .collect {
+                _ontheairTv.value = it
+            }
+    }
+
+    private val _popularTv = MutableLiveData<NetworkResult<ResponseTv>>()
+    val popularTv: LiveData<NetworkResult<ResponseTv>> = _popularTv
+
+    fun getPopularTv(page: Int) = viewModelScope.launch {
+        tvRepository.getPopular(page)
+            .collect {
+                _popularTv.value = it
+            }
+    }
+
 
 }

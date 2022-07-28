@@ -1,6 +1,7 @@
 package com.example.movie.view.fragment.home
 
 import android.view.View
+import android.view.animation.AnimationUtils
 import coil.load
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -15,6 +16,7 @@ class TvAdapter
 
     override fun convert(holder: ViewHolder, item: ResultTv) {
         holder.bindData(item)
+        holder.itemView.animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.transition_animation)
     }
 
     class ViewHolder(view: View) : BaseViewHolder(view) {

@@ -11,5 +11,8 @@
     <string name="movie.category.popular">Popular</string>
 
     <string name="tv.category.airingtoday">Airing Today</string>
+    <string name="tv.category.toprated">Top Rated</string>
+    <string name="tv.category.ontheair">On The Air</string>
+    <string name="tv.category.popular">Popular</string>
 
 </resources>

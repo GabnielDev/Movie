@@ -4,6 +4,7 @@ import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.movie.BuildConfig
 import com.example.movie.network.AuthInterceptor
+import com.example.movie.remote.service.DetailMovieServiceInstance
 import com.example.movie.remote.service.MovieServiceInstance
 import com.example.movie.remote.service.TvServiceInstance
 import com.example.movie.utils.Constants.BASE_URL
@@ -69,4 +70,9 @@ class AppModule {
     @Provides
     @Singleton
     fun provideTv(retrofit: Retrofit) = retrofit.create(TvServiceInstance::class.java)
+
+    @Provides
+    @Singleton
+    fun provideDetailMovie(retrofit: Retrofit) =
+        retrofit.create(DetailMovieServiceInstance::class.java)
 }

@@ -17,4 +17,6 @@ class MovieDataSource @Inject constructor(
 
     suspend fun getPopularMovie(page: Int) = service.getPopularMovie(page)
 
+    suspend fun getTrailerMovie(id: Int?) = service.getTrailerMovie(id)
+
 }

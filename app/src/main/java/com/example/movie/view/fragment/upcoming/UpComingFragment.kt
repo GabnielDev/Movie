@@ -1,13 +1,18 @@
 package com.example.movie.view.fragment.upcoming
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View.*
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.movie.R
 import com.example.movie.base.BaseFragment
 import com.example.movie.base.NetworkResult
 import com.example.movie.databinding.FragmentUpComingBinding
+import com.example.movie.helper.gotoYoutube
 import com.example.movie.helper.showToast
+import com.example.movie.remote.response.ResultsItem
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -15,15 +20,14 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
 
     private val viewModel: UpComingViewModel by viewModels()
 
-    private val upComingAdapter = UpComingAdapter()
-
     var page = 1
+    var key: String? = null
 
     override val bindingInflater: (LayoutInflater) -> FragmentUpComingBinding
         get() = FragmentUpComingBinding::inflate
 
     override fun initialization() {
-        setupView()
+
     }
 
     override fun observeViewModel() {
@@ -33,17 +37,7 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
                 is NetworkResult.Success -> {
                     val data = response.data?.results
                     if (!data.isNullOrEmpty()) {
-                        upComingAdapter.addData(data)
-                        binding.shimmerUpComing.root.visibility = GONE
-                        binding.rvUpComing.visibility = VISIBLE
-                        upComingAdapter.apply {
-//                            addChildClickViewIds(R.id.txtTontonSekarang)
-//                            setOnItemClickListener { _, _, position ->
-//                                Toast.makeText(view?.context, "Test Tonton", Toast.LENGTH_SHORT)
-//                                    .show()
-//                            }
-//                        }
-                        }
+                        setupUpcomingAdapter(data)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -54,18 +48,58 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
                 is NetworkResult.Loading -> {
                     binding.shimmerUpComing.root.startShimmerAnimation()
                 }
-
             }
-
-
         }
+
+        viewModel.trailer.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is NetworkResult.Success -> {
+                    val data = response.data?.results?.get(0)?.key
+                    if (!data.isNullOrEmpty()) {
+                        key = data
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("vnd.youtube:$key")
+                            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        )
+                    }
+                }
+                is NetworkResult.Error -> {
+                    response.message?.getContentIfNotHandled()?.let {
+                        showToast(context, it)
+                    }
+                }
+                is NetworkResult.Loading -> {
+                }
+            }
+        }
+
     }
 
-    private fun setupView() {
+    private fun setupUpcomingAdapter(list: ArrayList<ResultsItem>?) {
+        val upComingAdapter = UpComingAdapter().apply {
+            setNewInstance(list?.toMutableList())
+            addChildClickViewIds(R.id.txtTontonSekarang)
+
+            setOnItemChildClickListener { _, _, position ->
+                val item = list?.get(position)
+                val id = item?.id
+                viewModel.getTrailer(id)
+
+//                activity.let {
+//                    if (it != null) {
+//                        gotoYoutube(it, key)
+//                    }
+//                }
+            }
+        }
         binding.rvUpComing.apply {
+            visibility = VISIBLE
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = upComingAdapter
         }
+        binding.shimmerUpComing.root.visibility = GONE
     }
 
 }

@@ -1,6 +1,8 @@
 package com.example.movie.remote.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 data class ResponseMovie(
     @SerializedName("dates")
@@ -28,6 +30,7 @@ data class Dates(
     val minimum: String? = null
 )
 
+@Parcelize
 data class ResultsItem(
 
     @SerializedName("overview")
@@ -71,4 +74,4 @@ data class ResultsItem(
 
     @SerializedName("vote_count")
     val voteCount: Int? = null
-)
+) : Parcelable

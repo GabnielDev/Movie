@@ -29,7 +29,7 @@ abstract class BaseApiResponse {
         }
     }
 
-    private fun <T> error(errorMessage: SingleEvent<String>?): NetworkResult<T> =
-        NetworkResult.Error(errorMessage)
+    private fun <T> error(errorMessage: String): NetworkResult<T> =
+        NetworkResult.Error(SingleEvent(errorMessage))
 
 }

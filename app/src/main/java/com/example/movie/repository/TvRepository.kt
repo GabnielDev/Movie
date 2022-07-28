@@ -25,4 +25,31 @@ class TvRepository @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
+    suspend fun getTopRatedTv(page: Int): Flow<NetworkResult<ResponseTv>> {
+        return flow {
+            emit(NetworkResult.Loading())
+            emit(safeApiCall {
+                tvDataSource.getTopRated(page)
+            })
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getOnTheAir(page: Int): Flow<NetworkResult<ResponseTv>> {
+        return flow {
+            emit(NetworkResult.Loading())
+            emit(safeApiCall {
+                tvDataSource.getOnTheAir(page)
+            })
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getPopular(page:Int): Flow<NetworkResult<ResponseTv>> {
+        return flow {
+            emit(NetworkResult.Loading())
+            emit(safeApiCall {
+                tvDataSource.getPopular(page)
+            })
+        }.flowOn(Dispatchers.IO)
+    }
+
 }

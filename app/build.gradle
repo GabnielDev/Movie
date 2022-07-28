@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
     id 'dagger.hilt.android.plugin'
 }
 
@@ -54,7 +55,7 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
 //    BaseQuickAdapter
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.6'
 
 //    Shimmer
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'

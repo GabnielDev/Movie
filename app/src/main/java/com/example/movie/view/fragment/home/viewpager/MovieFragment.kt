@@ -11,6 +11,8 @@ import com.example.movie.base.BaseFragment
 import com.example.movie.base.NetworkResult
 import com.example.movie.databinding.FragmentMovieBinding
 import com.example.movie.helper.showToast
+import com.example.movie.remote.response.ResultsItem
+import com.example.movie.view.activity.detail.DetailMovieActivity
 import com.example.movie.view.fragment.home.HomeAdapter
 import com.example.movie.view.fragment.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,10 +22,6 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
 
     private val viewModel: HomeViewModel by viewModels()
     var page = 1
-
-    private val nowplayingAdapter = HomeAdapter()
-    private val topratedAdapter = HomeAdapter()
-    private val popularAdapter = HomeAdapter()
 
     override val bindingInflater: (LayoutInflater) -> FragmentMovieBinding
         get() = FragmentMovieBinding::inflate
@@ -39,17 +37,13 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
                 is NetworkResult.Success -> {
                     val data = response.data?.results
                     if (!data.isNullOrEmpty()) {
-                        nowplayingAdapter.addData(data)
-                        binding.layoutNowPlaying.apply {
-                            shimmerPoster.root.visibility = GONE
-                            rvPoster.visibility = VISIBLE
-                        }
+                        setupNowPlaying(data)
                     } else
                         Log.e("rvKosong", "getMovie: $data")
                 }
                 is NetworkResult.Error -> {
                     response.message?.getContentIfNotHandled()?.let {
-                       showToast(view?.context, it)
+                        showToast(view?.context, it)
                     }
                 }
                 is NetworkResult.Loading -> {
@@ -64,11 +58,7 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
                 is NetworkResult.Success -> {
                     val data = response.data?.results
                     if (!data.isNullOrEmpty()) {
-                        topratedAdapter.addData(data)
-                        binding.layoutTopRated.apply {
-                            shimmerPoster.root.visibility = GONE
-                            rvPoster.visibility = VISIBLE
-                        }
+                        setupTopRated(data)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -88,12 +78,7 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
                 is NetworkResult.Success -> {
                     val data = response.data?.results
                     if (!data.isNullOrEmpty()) {
-                        popularAdapter.addData(data)
-                        binding.layoutPopular.apply {
-                            showToast(view?.context, "$data")
-                            shimmerPoster.root.visibility = GONE
-                            rvPoster.visibility = VISIBLE
-                        }
+                        setupPopular(data)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -110,27 +95,73 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
     }
 
     private fun setupView() {
+        binding.layoutPopular.txtCategory.text = getString(R.string.movie_category_popular)
+        binding.layoutTopRated.txtCategory.text = getString(R.string.movie_category_toprated)
+        binding.layoutNowPlaying.txtCategory.text = getString(R.string.movie_category_nowplaying)
+    }
+
+    private fun setupNowPlaying(list: ArrayList<ResultsItem>?) {
+        val nowplayingAdapter = HomeAdapter().apply {
+            setNewInstance(list?.toMutableList())
+            setOnItemClickListener { _, _, position ->
+                val item = list?.get(position)
+                val intent = data.let {
+                    DetailMovieActivity.newIntent(context, item?.id)
+                }
+                startActivity(intent)
+            }
+        }
+
         binding.layoutNowPlaying.apply {
-            txtCategory.text = getString(R.string.movie_category_nowplaying)
+            shimmerPoster.root.visibility = GONE
             rvPoster.apply {
+                visibility = VISIBLE
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = nowplayingAdapter
             }
         }
+    }
+
+    private fun setupTopRated(list: ArrayList<ResultsItem>?) {
+        val topratedAdapter = HomeAdapter().apply {
+            setNewInstance(list?.toMutableList())
+            setOnItemClickListener { _, _, position ->
+                val item = list?.get(position)
+                val intent = data.let {
+                    DetailMovieActivity.newIntent(context, item?.id)
+                }
+                startActivity(intent)
+            }
+        }
         binding.layoutTopRated.apply {
-            txtCategory.text = getString(R.string.movie_category_toprated)
+            shimmerPoster.root.visibility = GONE
             rvPoster.apply {
+                visibility = VISIBLE
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = topratedAdapter
             }
         }
+    }
+
+    private fun setupPopular(list: ArrayList<ResultsItem>?) {
+        val popularAdapter = HomeAdapter().apply {
+            setNewInstance(list?.toMutableList())
+            setOnItemClickListener { _, _, position ->
+                val item = list?.get(position)
+                val intent = data.let {
+                    DetailMovieActivity.newIntent(context, item?.id)
+                }
+                startActivity(intent)
+            }
+        }
         binding.layoutPopular.apply {
-            txtCategory.text = getString(R.string.movie_category_popular)
+            shimmerPoster.root.visibility = GONE
             rvPoster.apply {
+                visibility = VISIBLE
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = popularAdapter
             }
         }
-
     }
+
 }
