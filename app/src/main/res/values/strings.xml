@@ -15,4 +15,11 @@
     <string name="tv.category.ontheair">On The Air</string>
     <string name="tv.category.popular">Popular</string>
 
+    <string name="title.actor.films">Actor Films</string>
+    <string name="title.crew.films">Crew Films</string>
+
+    <string name="txt.birthday">Kelahiran : %1$s</string>
+    <string name="txt.placebirthday">Tempat Kelahiran : %1$s</string>
+    <string name="txt.job">Pekerjaan : %1$s</string>
+
 </resources>

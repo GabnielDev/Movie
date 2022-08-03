@@ -5,12 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movie.base.NetworkResult
-import com.example.movie.remote.response.GenresItem
+import com.example.movie.remote.response.ResponseCredits
 import com.example.movie.remote.response.ResponseDetailMovie
 import com.example.movie.remote.response.ResponseTrailer
 import com.example.movie.repository.DetailMovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,13 +38,13 @@ class DetailMovieViewModel @Inject constructor(
             }
     }
 
-    private val _genres = MutableLiveData<ArrayList<GenresItem>?>()
-    val genre: LiveData<ArrayList<GenresItem>?> = _genres
+    private val _credits = MutableLiveData<NetworkResult<ResponseCredits>>()
+    val credits: LiveData<NetworkResult<ResponseCredits>> = _credits
 
-    fun getDetailGenre(movie_id: Int?) = viewModelScope.launch {
-        repository.getDetailMovie(movie_id)
+    fun getCredits(movie_id: Int?) = viewModelScope.launch {
+        repository.getCredits(movie_id)
             .collect {
-                _genres.value = it.data?.genres
+                _credits.value = it
             }
     }
 

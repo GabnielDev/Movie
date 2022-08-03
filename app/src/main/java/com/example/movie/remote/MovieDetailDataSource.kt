@@ -13,4 +13,6 @@ class MovieDetailDataSource @Inject constructor(
 
     suspend fun getTrailerMovie(movie_id: Int?) = service.getTrailerMovie(movie_id)
 
+    suspend fun getCredits(movie_id: Int?) = service.getCredits(movie_id)
+
 }

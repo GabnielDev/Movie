@@ -3,6 +3,7 @@ package com.example.movie.repository
 import com.example.movie.base.BaseApiResponse
 import com.example.movie.base.NetworkResult
 import com.example.movie.remote.MovieDetailDataSource
+import com.example.movie.remote.response.ResponseCredits
 import com.example.movie.remote.response.ResponseDetailMovie
 import com.example.movie.remote.response.ResponseTrailer
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +32,15 @@ class DetailMovieRepository @Inject constructor(
             emit(NetworkResult.Loading())
             emit(safeApiCall {
                 dataSource.getTrailerMovie(movie_id)
+            })
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getCredits(movie_id: Int?): Flow<NetworkResult<ResponseCredits>> {
+        return flow {
+            emit(NetworkResult.Loading())
+            emit(safeApiCall {
+                dataSource.getCredits(movie_id)
             })
         }.flowOn(Dispatchers.IO)
     }

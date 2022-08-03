@@ -1,5 +1,6 @@
 package com.example.movie.view.activity.detail
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -8,25 +9,29 @@ import android.view.View.VISIBLE
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
-import com.example.movie.BuildConfig
+import com.example.movie.R.string.title_actor_films
+import com.example.movie.R.string.title_crew_films
+import com.example.movie.adapter.CastAdapter
+import com.example.movie.adapter.CrewAdapter
 import com.example.movie.base.BaseActivity
 import com.example.movie.base.NetworkResult
 import com.example.movie.databinding.ActivityDetailMovieBinding
 import com.example.movie.helper.gotoWhatsApp
 import com.example.movie.helper.gotoYoutube
 import com.example.movie.helper.showToast
-import com.example.movie.remote.response.GenresItem
-import com.example.movie.remote.response.ResponseDetailMovie
+import com.example.movie.remote.response.*
 import com.example.movie.utils.Constants.BASE_URL_BACKPOSTER
+import com.example.movie.utils.Constants.BASE_URL_POSTER
+import com.example.movie.view.activity.detailpeople.DetailPeopleActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
 class DetailMovieActivity : BaseActivity<ActivityDetailMovieBinding>() {
 
-    var id: Int? = null
-    private var key: String? = null
+    private var id: Int? = 0
 
+    private var key: String? = null
     private val viewModel: DetailMovieViewModel by viewModels()
 
     override val setLayout: (LayoutInflater) -> ActivityDetailMovieBinding
@@ -39,7 +44,7 @@ class DetailMovieActivity : BaseActivity<ActivityDetailMovieBinding>() {
 
     private fun getData() {
         intent.let {
-            id = it.getIntExtra(ID, 0)
+            id = it.getIntExtra("ID", 0)
         }
     }
 
@@ -50,6 +55,7 @@ class DetailMovieActivity : BaseActivity<ActivityDetailMovieBinding>() {
                 is NetworkResult.Success -> {
                     val data = response.data
                     setupView(data)
+                    setupGenre(data?.genres)
                 }
                 is NetworkResult.Error -> {
                     response.message?.getContentIfNotHandled()?.let {
@@ -62,21 +68,13 @@ class DetailMovieActivity : BaseActivity<ActivityDetailMovieBinding>() {
             }
         }
 
-        viewModel.getDetailGenre(id)
-        viewModel.genre.observe(this) { response ->
-            if (!response.isNullOrEmpty()) {
-                setupGenre(response)
-            }
-
-        }
-
         viewModel.getDetailTrailer(id)
         viewModel.trailer.observe(this) { response ->
             when (response) {
                 is NetworkResult.Success -> {
-                    val data = response.data?.results?.get(0)?.key
+                    val data = response.data?.results
                     if (!data.isNullOrEmpty()) {
-                        key = data
+                        key = data[0].key
                     }
                 }
                 is NetworkResult.Error -> {
@@ -88,16 +86,44 @@ class DetailMovieActivity : BaseActivity<ActivityDetailMovieBinding>() {
                 }
             }
         }
+
+        viewModel.getCredits(id)
+        viewModel.credits.observe(this) { response ->
+            when (response) {
+                is NetworkResult.Success -> {
+                    val data = response.data
+                    setupCast(data?.cast)
+                    setupCrew(data?.crew)
+                }
+                is NetworkResult.Error -> {
+                    response.message?.getContentIfNotHandled()?.let {
+                        showToast(applicationContext, it)
+                    }
+
+                }
+                is NetworkResult.Loading -> {
+                }
+            }
+        }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setupView(data: ResponseDetailMovie?) {
         binding.shimmerDetail.root.visibility = GONE
         binding.layoutDetail.apply {
             root.visibility = VISIBLE
-            imgPoster.load(BASE_URL_BACKPOSTER + data?.backdropPath)
-            txtJudulPertama.text = data?.originalTitle
-            txtJudul.text = data?.title
+            imgPoster.load(BASE_URL_POSTER + data?.posterPath)
+            imgBackposter.load(BASE_URL_BACKPOSTER + data?.backdropPath)
+            txtJudulPertama.text = data?.title
+            txtRating.text = "Rating : ${data?.voteAverage.toString()}/10"
+            txtAdult.text = "Adult : ${data?.adult}"
             txtDesc.text = data?.overview
+
+            if (data?.voteCount!! >= 1000) {
+                txtVotes.text =
+                    "Votes : " + ("%.2f".format(data.voteCount.toFloat().div(1000))) + "k"
+            } else txtVotes.text = "Votes : ${data.voteCount}"
+
         }
     }
 
@@ -114,32 +140,71 @@ class DetailMovieActivity : BaseActivity<ActivityDetailMovieBinding>() {
 
     }
 
+    private fun setupCast(list: ArrayList<CastItem>?) {
+        val castAdapter = CastAdapter().apply {
+            setNewInstance(list?.toMutableList())
+            setOnItemClickListener { _, _, position ->
+                val item = list?.get(position)
+                val intent = DetailPeopleActivity.newIntent(applicationContext, item?.id)
+                startActivity(intent)
+            }
+        }
+        binding.layoutDetail.layoutCast.apply {
+            txtTitle.text = getString(title_actor_films)
+            recyclerView.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = castAdapter
+            }
+        }
+    }
+
+    private fun setupCrew(list: ArrayList<CrewItem>?) {
+        val crewAdapter = CrewAdapter().apply {
+            setNewInstance(list?.toMutableList())
+            setOnItemClickListener { _, _, position ->
+                val item = list?.get(position)
+                val intent = DetailPeopleActivity.newIntent(applicationContext, item?.id)
+                startActivity(intent)
+            }
+        }
+        binding.layoutDetail.layoutCrew.apply {
+            txtTitle.text = getString(title_crew_films)
+            recyclerView.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = crewAdapter
+            }
+        }
+
+    }
+
     private fun setonclickListener() {
         binding.layoutDetail.apply {
-            txtTontonSekarang.setOnClickListener {
-                gotoYoutube(this@DetailMovieActivity, key)
+            btnTontonTrailer.setOnClickListener {
+                if (!key.isNullOrEmpty()) {
+                    gotoYoutube(applicationContext, key)
+                } else
+                    showToast(applicationContext, "Trailer Tidak Tersedia")
             }
             imgShare.setOnClickListener {
                 gotoWhatsApp(
-                    this@DetailMovieActivity,
+                    applicationContext,
                     "Tonton Trailernya disini\n\nhttp://www.youtube.com/watch?v=$key"
                 )
             }
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
 
     companion object {
-
-        private const val ID = BuildConfig.APPLICATION_ID + ".DETAIL.MOVIE.ID"
-
         fun newIntent(context: Context, id: Int?): Intent {
             val intent = Intent(context, DetailMovieActivity::class.java).apply {
-                putExtra(ID, id)
+                putExtra("ID", id)
             }
             return intent
         }
     }
-
 
 }

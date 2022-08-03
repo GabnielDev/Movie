@@ -16,7 +16,6 @@ abstract class BaseActivity<B : ViewBinding> : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = setLayout.invoke(layoutInflater)
         setContentView(binding.root)
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         initialization()
         observeViewModel()

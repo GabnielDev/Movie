@@ -9,7 +9,7 @@ data class ResponseTrailer(
     val id: Int? = null,
 
     @SerializedName("results")
-    val results: ArrayList<ResultTrailer?>? = null
+    val results: ArrayList<ResultTrailer>? = null
 )
 
 @Parcelize

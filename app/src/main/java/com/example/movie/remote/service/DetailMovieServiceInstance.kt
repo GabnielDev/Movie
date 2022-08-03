@@ -1,5 +1,6 @@
 package com.example.movie.remote.service
 
+import com.example.movie.remote.response.ResponseCredits
 import com.example.movie.remote.response.ResponseDetailMovie
 import com.example.movie.remote.response.ResponseTrailer
 import com.example.movie.utils.Constants
@@ -18,5 +19,10 @@ interface DetailMovieServiceInstance {
     suspend fun getTrailerMovie(
         @Path("movie_id") movie_id: Int?
     ): Response<ResponseTrailer>
+
+    @GET("movie/{movie_id}/credits")
+    suspend fun getCredits(
+        @Path("movie_id") movie_id: Int?
+    ): Response<ResponseCredits>
 
 }

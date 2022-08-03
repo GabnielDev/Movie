@@ -14,31 +14,20 @@ fun showToast(
     Toast.makeText(context, message, duration).show()
 }
 
-//fun gotoYoutube(
-//    activity: Activity,
-//    key: String?
-//) {
-//    activity.startActivity(
-//        Intent(
-//            Intent.ACTION_VIEW,
-//            Uri.parse("vnd:youtube:$key")
-//        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//    )
-//}
-
 fun gotoYoutube(
-    activity: Activity,
+    context: Context,
     key: String?
 ) {
     val url = "vnd.youtube:$key"
     val intent = Intent(Intent.ACTION_VIEW).apply {
         data = Uri.parse(url)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
-    activity.startActivity(intent)
+    context.startActivity(intent)
 }
 
 fun gotoWhatsApp(
-    activity: Activity,
+    context: Context,
     text: String?
 ) {
     val intent = Intent(Intent.ACTION_SEND).apply {
@@ -46,7 +35,7 @@ fun gotoWhatsApp(
         type = "text/plain"
         putExtra(Intent.EXTRA_TEXT, text)
     }
-    activity.startActivity(intent)
+    context.startActivity(intent)
 //    else {
 //        showSnackbarWithButton(
 //            root,
@@ -56,4 +45,10 @@ fun gotoWhatsApp(
 //        ) {
 //            getWhatsappFromPlayStore(activity)
 //        }
+
+
+}
+
+fun buildYouTubeThumbnailURL(key: String): String {
+    return "https://img.youtube.com/vi/$key/0.jpg"
 }

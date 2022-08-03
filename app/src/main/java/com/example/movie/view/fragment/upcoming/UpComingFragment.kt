@@ -57,12 +57,7 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
                     val data = response.data?.results?.get(0)?.key
                     if (!data.isNullOrEmpty()) {
                         key = data
-                        startActivity(
-                            Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("vnd.youtube:$key")
-                            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        )
+                        context?.let { gotoYoutube(it, key) }
                     }
                 }
                 is NetworkResult.Error -> {
@@ -87,11 +82,6 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
                 val id = item?.id
                 viewModel.getTrailer(id)
 
-//                activity.let {
-//                    if (it != null) {
-//                        gotoYoutube(it, key)
-//                    }
-//                }
             }
         }
         binding.rvUpComing.apply {
@@ -101,6 +91,7 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
         }
         binding.shimmerUpComing.root.visibility = GONE
     }
+
 
 }
 
