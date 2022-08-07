@@ -19,7 +19,5 @@ class PeopleDataSource @Inject constructor(
 
     suspend fun getPersonMovieCredits(person_id: Int?) = service.getPersonMovieCredits(person_id)
 
-    suspend fun getPopularPeople(page: Int?) = service.getPopularPeople(page)
-
 
 }

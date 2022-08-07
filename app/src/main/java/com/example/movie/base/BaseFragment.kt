@@ -7,21 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseFragment<B : ViewBinding> : Fragment() {
+abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
-    private var _binding: B? = null
-    val binding get() = _binding!!
-
-    abstract val bindingInflater: (LayoutInflater) -> B
+    protected lateinit var binding: VB
+    protected abstract fun setLayout(inflater: LayoutInflater): VB
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = bindingInflater.invoke(inflater)
-
-        return binding.root
+        return getInflatedLayout(inflater)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,10 +31,9 @@ abstract class BaseFragment<B : ViewBinding> : Fragment() {
 
     abstract fun observeViewModel()
 
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun getInflatedLayout(layoutInflater: LayoutInflater): View {
+        binding = setLayout(layoutInflater)
+        return binding.root
     }
 
 }

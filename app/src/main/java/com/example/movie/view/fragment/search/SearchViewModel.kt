@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.movie.base.NetworkResult
 import com.example.movie.remote.response.ResponseMovie
 import com.example.movie.repository.SearchRepository
-import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

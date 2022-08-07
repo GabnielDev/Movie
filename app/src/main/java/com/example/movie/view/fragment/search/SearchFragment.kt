@@ -20,8 +20,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     private val viewModel: SearchViewModel by viewModels()
 
-    override val bindingInflater: (LayoutInflater) -> FragmentSearchBinding
-        get() = FragmentSearchBinding::inflate
+    override fun setLayout(inflater: LayoutInflater): FragmentSearchBinding {
+        return FragmentSearchBinding.inflate(inflater)
+    }
 
     override fun initialization() {
         searchPoster()
@@ -88,5 +89,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             adapter = searchAdapter
         }
     }
+
 
 }

@@ -28,8 +28,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     lateinit var menu: Menu
     lateinit var menuItem: MenuItem
 
-    override val setLayout: (LayoutInflater) -> ActivityMainBinding
-        get() = ActivityMainBinding::inflate
+    override fun setLayout(inflater: LayoutInflater): ActivityMainBinding {
+        return ActivityMainBinding.inflate(inflater)
+    }
 
 
     override fun initialization() {
@@ -77,6 +78,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         fm.beginTransaction().hide(defaultFragment).show(fragment).commit()
         defaultFragment = fragment
     }
+
+
 
 }
 

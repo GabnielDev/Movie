@@ -19,14 +19,15 @@
                 layout="@layout/item_detail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
                  />
 
-<!--            <include-->
-<!--                android:id="@+id/shimmerDetail"-->
-<!--                layout="@layout/shimmer_item_upcoming"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:visibility="gone"-->
-<!--                android:layout_height="wrap_content" />-->
+            <include
+                android:id="@+id/shimmerDetail"
+                layout="@layout/shimmer_item_upcoming"
+                android:layout_width="match_parent"
+                android:visibility="visible"
+                android:layout_height="wrap_content" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

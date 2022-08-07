@@ -2,20 +2,20 @@ package com.example.movie.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseActivity<B : ViewBinding> : AppCompatActivity() {
+abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
 
-    protected lateinit var binding: B
+    protected lateinit var binding: VB
 
-    abstract val setLayout: (LayoutInflater) -> B
+    protected abstract fun setLayout(inflater: LayoutInflater) : VB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = setLayout.invoke(layoutInflater)
-        setContentView(binding.root)
+        setContentView(getInflatedLayout())
 
         initialization()
         observeViewModel()
@@ -24,6 +24,11 @@ abstract class BaseActivity<B : ViewBinding> : AppCompatActivity() {
     abstract fun initialization()
 
     abstract fun observeViewModel()
+
+    private fun getInflatedLayout(): View {
+        binding = setLayout(layoutInflater)
+        return binding.root
+    }
 
 
 }

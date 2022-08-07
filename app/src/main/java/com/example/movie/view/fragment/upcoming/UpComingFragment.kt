@@ -1,7 +1,5 @@
 package com.example.movie.view.fragment.upcoming
 
-import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View.*
 import androidx.fragment.app.viewModels
@@ -13,7 +11,6 @@ import com.example.movie.databinding.FragmentUpComingBinding
 import com.example.movie.helper.gotoYoutube
 import com.example.movie.helper.showToast
 import com.example.movie.remote.response.ResultsItem
-import com.example.movie.view.fragment.home.HomeAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,8 +23,10 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
 
     private var upComingAdapter = UpComingAdapter()
 
-    override val bindingInflater: (LayoutInflater) -> FragmentUpComingBinding
-        get() = FragmentUpComingBinding::inflate
+    override fun setLayout(inflater: LayoutInflater): FragmentUpComingBinding {
+        return FragmentUpComingBinding.inflate(inflater)
+    }
+
 
     override fun initialization() {
         setupRecyclerView()
@@ -41,7 +40,6 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
                     val data = response.data?.results
                     if (!data.isNullOrEmpty()) {
                         setupAdapter(data)
-//                        setupUpcomingAdapter(data)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -50,7 +48,7 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
                     }
                 }
                 is NetworkResult.Loading -> {
-//                    binding.shimmerUpComing.root.startShimmerAnimation()
+                    binding.shimmerUpComing.root.startShimmer()
                 }
             }
         }
@@ -80,7 +78,6 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
         upComingAdapter.apply {
             setNewInstance(list?.toMutableList())
             addChildClickViewIds(R.id.txtTontonSekarang)
-
             setOnItemChildClickListener { _, _, position ->
                 val item = list?.get(position)
                 val id = item?.id
@@ -97,6 +94,7 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
         }
         binding.shimmerUpComing.root.visibility = GONE
     }
+
 
 }
 

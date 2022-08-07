@@ -37,8 +37,9 @@ class DetailMovieActivity : BaseActivity<ActivityDetailMovieBinding>() {
     private var key: String? = null
     private val viewModel: DetailMovieViewModel by viewModels()
 
-    override val setLayout: (LayoutInflater) -> ActivityDetailMovieBinding
-        get() = ActivityDetailMovieBinding::inflate
+    override fun setLayout(inflater: LayoutInflater): ActivityDetailMovieBinding {
+        return ActivityDetailMovieBinding.inflate(inflater)
+    }
 
     override fun initialization() {
         getData()
@@ -66,14 +67,7 @@ class DetailMovieActivity : BaseActivity<ActivityDetailMovieBinding>() {
                     }
                 }
                 is NetworkResult.Loading -> {
-                    binding.root.loadSkeleton {
-                        val customShimmer = Shimmer.AlphaHighlightBuilder()
-                            .setDirection(Shimmer.Direction.TOP_TO_BOTTOM)
-                            .build()
-                        shimmer(customShimmer)
-                    }
-//                    binding.layoutDetail.root.startShimmer()
-//                    binding.shimmerDetail.root.startShimmer()
+                    binding.shimmerDetail.root.startShimmer()
                 }
             }
         }
@@ -119,12 +113,9 @@ class DetailMovieActivity : BaseActivity<ActivityDetailMovieBinding>() {
 
     @SuppressLint("SetTextI18n")
     private fun setupView(data: ResponseDetailMovie?) {
-
-        binding.root.hideSkeleton()
-//        binding.shimmerDetail.root.visibility = GONE
+        binding.shimmerDetail.root.visibility = GONE
         binding.layoutDetail.apply {
             root.visibility = VISIBLE
-            root.stopShimmer()
             imgPoster.load(BASE_URL_POSTER + data?.posterPath)
             imgBackposter.load(BASE_URL_BACKPOSTER + data?.backdropPath)
             txtJudulPertama.text = data?.title
@@ -139,6 +130,7 @@ class DetailMovieActivity : BaseActivity<ActivityDetailMovieBinding>() {
 
         }
     }
+
     private fun setupGenre(list: ArrayList<GenresItem>?) {
         val genreAdapter = GenreDetailAdapter().apply {
             setNewInstance(list?.toMutableList())
@@ -151,6 +143,7 @@ class DetailMovieActivity : BaseActivity<ActivityDetailMovieBinding>() {
         }
 
     }
+
     private fun setupCast(list: ArrayList<CastItem>?) {
         val castAdapter = CastAdapter().apply {
             setNewInstance(list?.toMutableList())
@@ -168,6 +161,7 @@ class DetailMovieActivity : BaseActivity<ActivityDetailMovieBinding>() {
             }
         }
     }
+
     private fun setupCrew(list: ArrayList<CrewItem>?) {
         val crewAdapter = CrewAdapter().apply {
             setNewInstance(list?.toMutableList())
@@ -212,5 +206,6 @@ class DetailMovieActivity : BaseActivity<ActivityDetailMovieBinding>() {
             return intent
         }
     }
+
 
 }

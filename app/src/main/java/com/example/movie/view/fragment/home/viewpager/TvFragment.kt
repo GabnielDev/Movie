@@ -14,8 +14,6 @@ import com.example.movie.view.fragment.home.TvAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.movie.R.string
 import com.example.movie.remote.response.ResultTv
-import com.example.movie.remote.response.ResultsItem
-import koleton.api.loadSkeleton
 
 @AndroidEntryPoint
 class TvFragment : BaseFragment<FragmentTvBinding>() {
@@ -24,8 +22,9 @@ class TvFragment : BaseFragment<FragmentTvBinding>() {
 
     var page = 1
 
-    override val bindingInflater: (LayoutInflater) -> FragmentTvBinding
-        get() = FragmentTvBinding::inflate
+    override fun setLayout(inflater: LayoutInflater): FragmentTvBinding {
+        return FragmentTvBinding.inflate(inflater)
+    }
 
     override fun initialization() {
         setupView()
@@ -47,7 +46,7 @@ class TvFragment : BaseFragment<FragmentTvBinding>() {
                     }
                 }
                 is NetworkResult.Loading -> {
-//                    binding.layoutAiring.shimmerPoster.root.startShimmerAnimation()
+                    binding.layoutAiring.shimmerPoster.root.startShimmer()
                 }
             }
         }
@@ -67,7 +66,7 @@ class TvFragment : BaseFragment<FragmentTvBinding>() {
                     }
                 }
                 is NetworkResult.Loading -> {
-//                    binding.layoutTopRated.shimmerPoster.root.startShimmerAnimation()
+                    binding.layoutTopRated.shimmerPoster.root.startShimmer()
                 }
             }
         }
@@ -87,7 +86,7 @@ class TvFragment : BaseFragment<FragmentTvBinding>() {
                     }
                 }
                 is NetworkResult.Loading -> {
-//                    binding.layoutOnTheAir.shimmerPoster.root.startShimmerAnimation()
+                    binding.layoutOnTheAir.shimmerPoster.root.startShimmer()
                 }
             }
         }
@@ -116,7 +115,7 @@ class TvFragment : BaseFragment<FragmentTvBinding>() {
     private fun setupView() {
         binding.layoutOnTheAir.txtCategory.text = getString(string.tv_category_ontheair)
         binding.layoutAiring.txtCategory.text = getString(string.tv_category_airingtoday)
-        binding.layoutOnTheAir.txtCategory.text = getString(string.tv_category_ontheair)
+        binding.layoutTopRated.txtCategory.text = getString(string.tv_category_toprated)
         binding.layoutPopular.txtCategory.text = getString(string.tv_category_popular)
     }
 
@@ -125,7 +124,7 @@ class TvFragment : BaseFragment<FragmentTvBinding>() {
             setNewInstance(list?.toMutableList())
         }
         binding.layoutAiring.apply {
-//            shimmerPoster.root.visibility = GONE
+            shimmerPoster.root.visibility = GONE
             rvPoster.apply {
                 visibility = VISIBLE
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -139,7 +138,7 @@ class TvFragment : BaseFragment<FragmentTvBinding>() {
             setNewInstance(list?.toMutableList())
         }
         binding.layoutTopRated.apply {
-//            shimmerPoster.root.visibility = GONE
+            shimmerPoster.root.visibility = GONE
             rvPoster.apply {
                 visibility = VISIBLE
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -153,7 +152,7 @@ class TvFragment : BaseFragment<FragmentTvBinding>() {
             setNewInstance(list?.toMutableList())
         }
         binding.layoutOnTheAir.apply {
-//            shimmerPoster.root.visibility = GONE
+            shimmerPoster.root.visibility = GONE
             rvPoster.apply {
                 visibility = VISIBLE
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -167,7 +166,7 @@ class TvFragment : BaseFragment<FragmentTvBinding>() {
             setNewInstance(list?.toMutableList())
         }
         binding.layoutPopular.apply {
-//            shimmerPoster.root.visibility = GONE
+            shimmerPoster.root.visibility = GONE
             rvPoster.apply {
                 visibility = VISIBLE
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -176,5 +175,6 @@ class TvFragment : BaseFragment<FragmentTvBinding>() {
         }
 
     }
+
 
 }

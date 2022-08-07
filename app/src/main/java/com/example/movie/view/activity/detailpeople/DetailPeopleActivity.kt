@@ -29,8 +29,9 @@ class DetailPeopleActivity : BaseActivity<ActivityDetailPeopleBinding>() {
 
     private val viewModel: DetailPeopleViewModel by viewModels()
 
-    override val setLayout: (LayoutInflater) -> ActivityDetailPeopleBinding
-        get() = ActivityDetailPeopleBinding::inflate
+    override fun setLayout(inflater: LayoutInflater): ActivityDetailPeopleBinding {
+        return ActivityDetailPeopleBinding.inflate(inflater)
+    }
 
     override fun initialization() {
         getData()
@@ -55,12 +56,6 @@ class DetailPeopleActivity : BaseActivity<ActivityDetailPeopleBinding>() {
 
                 }
                 is NetworkResult.Loading -> {
-                    binding.root.loadSkeleton {
-                        val customShimmer = Shimmer.AlphaHighlightBuilder()
-                            .setDirection(Shimmer.Direction.TOP_TO_BOTTOM)
-                            .build()
-                        shimmer(customShimmer)
-                    }
 
                 }
             }
@@ -128,7 +123,6 @@ class DetailPeopleActivity : BaseActivity<ActivityDetailPeopleBinding>() {
         binding.layoutCast.apply {
             txtTitle.text = getString(title_actor_films)
             recyclerView.apply {
-                loadSkeleton(R.layout.item_poster_people)
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = castAdapter
             }
@@ -141,6 +135,7 @@ class DetailPeopleActivity : BaseActivity<ActivityDetailPeopleBinding>() {
             setOnItemClickListener { _, _, position ->
                 val item = list?.get(position)
                 val intent = DetailMovieActivity.newIntent(context, item?.id)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
         }
@@ -162,5 +157,7 @@ class DetailPeopleActivity : BaseActivity<ActivityDetailPeopleBinding>() {
             return intent
         }
     }
+
+
 
 }

@@ -58,27 +58,4 @@ class AppModule {
             .baseUrl(BASE_URL)
             .client(okHttpClient)
             .build()
-
-    @Provides
-    @Singleton
-    fun provideMovie(retrofit: Retrofit) = retrofit.create(MovieServiceInstance::class.java)
-
-    @Provides
-    @Singleton
-    fun provideTv(retrofit: Retrofit) = retrofit.create(TvServiceInstance::class.java)
-
-    @Provides
-    @Singleton
-    fun provideDetailMovie(retrofit: Retrofit) =
-        retrofit.create(DetailMovieServiceInstance::class.java)
-
-    @Provides
-    @Singleton
-    fun provideSearch(retrofit: Retrofit) =
-        retrofit.create(SearchServiceInstace::class.java)
-
-    @Provides
-    @Singleton
-    fun providePeople(retrofit: Retrofit) =
-        retrofit.create(PeopleServinceInstance::class.java)
 }

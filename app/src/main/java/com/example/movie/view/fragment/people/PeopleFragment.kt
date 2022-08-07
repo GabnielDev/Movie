@@ -25,8 +25,9 @@ class PeopleFragment : BaseFragment<FragmentPeopleBinding>(), PagingAdapter.OnCl
 
     private lateinit var pagingAdapter: PagingAdapter
 
-    override val bindingInflater: (LayoutInflater) -> FragmentPeopleBinding
-        get() = FragmentPeopleBinding::inflate
+    override fun setLayout(inflater: LayoutInflater): FragmentPeopleBinding {
+        return FragmentPeopleBinding.inflate(inflater)
+    }
 
     override fun initialization() {
         setupRecyclerView()

@@ -10,7 +10,6 @@ import com.example.movie.remote.response.ResponseTv
 import com.example.movie.repository.MovieRepository
 import com.example.movie.repository.TvRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
