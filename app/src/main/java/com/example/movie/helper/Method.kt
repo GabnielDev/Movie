@@ -3,8 +3,11 @@ package com.example.movie.helper
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import android.widget.Toast
+import androidx.paging.PagingSource
+import com.example.movie.base.NetworkResult
 
 fun showToast(
     context: Context?,
@@ -15,7 +18,7 @@ fun showToast(
 }
 
 fun gotoYoutube(
-    context: Context,
+    context: Context?,
     key: String?
 ) {
     val url = "vnd.youtube:$key"
@@ -23,7 +26,7 @@ fun gotoYoutube(
         data = Uri.parse(url)
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
-    context.startActivity(intent)
+    context?.startActivity(intent)
 }
 
 fun gotoWhatsApp(
@@ -51,4 +54,15 @@ fun gotoWhatsApp(
 
 fun buildYouTubeThumbnailURL(key: String): String {
     return "https://img.youtube.com/vi/$key/0.jpg"
+}
+
+inline infix fun <T, Value : Any> NetworkResult<T>.pagingSucceeded(
+    predicate: (data: T) -> PagingSource.LoadResult<Int, Value>
+): PagingSource.LoadResult<Int, Value> {
+    return if (this is NetworkResult.Success && this.data != null) {
+        predicate.invoke(this.data)
+    } else {
+        PagingSource.LoadResult.Error(Resources.NotFoundException())
+
+    }
 }

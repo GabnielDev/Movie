@@ -18,8 +18,8 @@
         android:icon="@drawable/ic_launcher_foreground"
         android:title="Save" />
     <item
-        android:id="@+id/menuOther"
+        android:id="@+id/menuPeople"
         android:icon="@drawable/ic_launcher_foreground"
-        android:title="Other" />
+        android:title="People" />
 
 </menu>

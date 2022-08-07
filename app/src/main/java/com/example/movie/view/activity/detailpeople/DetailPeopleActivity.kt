@@ -2,10 +2,7 @@ package com.example.movie.view.activity.detailpeople
 
 import android.content.Context
 import android.content.Intent
-import android.net.Network
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.View.VISIBLE
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,15 +12,15 @@ import com.example.movie.R.string.*
 import com.example.movie.base.BaseActivity
 import com.example.movie.base.NetworkResult
 import com.example.movie.databinding.ActivityDetailPeopleBinding
-import com.example.movie.helper.showToast
 import com.example.movie.remote.response.ItemCast
 import com.example.movie.remote.response.ItemCrew
 import com.example.movie.remote.response.ResponseDetailPeople
 import com.example.movie.utils.Constants.BASE_URL_POSTER
 import com.example.movie.view.activity.detail.DetailMovieActivity
-import com.example.movie.view.fragment.people.PeopleViewModel
+import com.facebook.shimmer.Shimmer
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
+import koleton.api.hideSkeleton
+import koleton.api.loadSkeleton
 
 @AndroidEntryPoint
 class DetailPeopleActivity : BaseActivity<ActivityDetailPeopleBinding>() {
@@ -37,6 +34,7 @@ class DetailPeopleActivity : BaseActivity<ActivityDetailPeopleBinding>() {
 
     override fun initialization() {
         getData()
+
     }
 
     private fun getData() {
@@ -57,6 +55,12 @@ class DetailPeopleActivity : BaseActivity<ActivityDetailPeopleBinding>() {
 
                 }
                 is NetworkResult.Loading -> {
+                    binding.root.loadSkeleton {
+                        val customShimmer = Shimmer.AlphaHighlightBuilder()
+                            .setDirection(Shimmer.Direction.TOP_TO_BOTTOM)
+                            .build()
+                        shimmer(customShimmer)
+                    }
 
                 }
             }
@@ -93,6 +97,7 @@ class DetailPeopleActivity : BaseActivity<ActivityDetailPeopleBinding>() {
 
     private fun setupView(data: ResponseDetailPeople?) {
         binding.run {
+            root.hideSkeleton()
             imgPhoto.load(BASE_URL_POSTER + data?.profilePath)
             txtName.text = data?.name
             txtBiography.text = data?.biography
@@ -105,9 +110,6 @@ class DetailPeopleActivity : BaseActivity<ActivityDetailPeopleBinding>() {
                 txtPlaceBirth.text = getString(txt_placebirthday, data?.placeOfBirth)
             } else txtPlaceBirth.text = getString(txt_placebirthday, "Tidak diketahui")
 
-            btnTest.setOnClickListener {
-                onBackPressed()
-            }
         }
     }
 
@@ -117,6 +119,7 @@ class DetailPeopleActivity : BaseActivity<ActivityDetailPeopleBinding>() {
             setOnItemClickListener { _, _, position ->
                 val item = list?.get(position)
                 val intent = DetailMovieActivity.newIntent(context, item?.id)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
 
@@ -125,6 +128,7 @@ class DetailPeopleActivity : BaseActivity<ActivityDetailPeopleBinding>() {
         binding.layoutCast.apply {
             txtTitle.text = getString(title_actor_films)
             recyclerView.apply {
+                loadSkeleton(R.layout.item_poster_people)
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = castAdapter
             }
@@ -149,12 +153,9 @@ class DetailPeopleActivity : BaseActivity<ActivityDetailPeopleBinding>() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
 
     companion object {
-        fun newIntent(context: Context, id: Int?): Intent {
+        fun newIntent(context: Context?, id: Int?): Intent {
             val intent = Intent(context, DetailPeopleActivity::class.java).apply {
                 putExtra("ID", id)
             }

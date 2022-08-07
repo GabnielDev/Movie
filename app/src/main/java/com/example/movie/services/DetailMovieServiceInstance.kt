@@ -1,4 +1,4 @@
-package com.example.movie.remote.service
+package com.example.movie.services
 
 import com.example.movie.remote.response.ResponseCredits
 import com.example.movie.remote.response.ResponseDetailMovie

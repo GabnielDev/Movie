@@ -10,6 +10,7 @@ import com.example.movie.databinding.ItemPosterBinding
 import com.example.movie.remote.response.ResultsItem
 import com.example.movie.utils.Constants.BASE_URL_POSTER
 import com.example.movie.view.fragment.home.HomeAdapter.ViewHolder
+import koleton.api.loadSkeleton
 
 class HomeAdapter
     : BaseQuickAdapter<ResultsItem, ViewHolder>
@@ -30,5 +31,4 @@ class HomeAdapter
             }
         }
     }
-
 }

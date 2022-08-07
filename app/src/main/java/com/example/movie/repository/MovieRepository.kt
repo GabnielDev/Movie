@@ -3,7 +3,7 @@ package com.example.movie.repository
 import com.example.movie.base.BaseApiResponse
 import com.example.movie.base.NetworkResult
 import com.example.movie.remote.response.ResponseMovie
-import com.example.movie.remote.MovieDataSource
+import com.example.movie.sources.MovieDataSource
 import com.example.movie.remote.response.ResponseTrailer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

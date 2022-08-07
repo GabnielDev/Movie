@@ -15,7 +15,10 @@ import com.example.movie.remote.response.ResultsItem
 import com.example.movie.view.activity.detail.DetailMovieActivity
 import com.example.movie.view.fragment.home.HomeAdapter
 import com.example.movie.view.fragment.home.HomeViewModel
+import com.facebook.shimmer.Shimmer
 import dagger.hilt.android.AndroidEntryPoint
+import koleton.api.hideSkeleton
+import koleton.api.loadSkeleton
 
 @AndroidEntryPoint
 class MovieFragment : BaseFragment<FragmentMovieBinding>() {
@@ -23,11 +26,15 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
     private val viewModel: HomeViewModel by viewModels()
     var page = 1
 
+    private var testAdapter = HomeAdapter()
+
     override val bindingInflater: (LayoutInflater) -> FragmentMovieBinding
         get() = FragmentMovieBinding::inflate
 
     override fun initialization() {
         setupView()
+//        setupRecyclerView()
+
     }
 
     override fun observeViewModel() {
@@ -37,7 +44,9 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
                 is NetworkResult.Success -> {
                     val data = response.data?.results
                     if (!data.isNullOrEmpty()) {
+//                        setupAdapter(data)
                         setupNowPlaying(data)
+//                        view?.hideSkeleton()
                     } else
                         Log.e("rvKosong", "getMovie: $data")
                 }
@@ -47,7 +56,7 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
                     }
                 }
                 is NetworkResult.Loading -> {
-                    binding.layoutNowPlaying.shimmerPoster.root.startShimmerAnimation()
+                    binding.layoutNowPlaying.shimmerPoster.root.startShimmer()
                 }
             }
         }
@@ -67,7 +76,7 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
                     }
                 }
                 is NetworkResult.Loading -> {
-                    binding.layoutTopRated.shimmerPoster.root.startShimmerAnimation()
+                    binding.layoutTopRated.shimmerPoster.root.startShimmer()
                 }
             }
         }
@@ -87,7 +96,7 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
                     }
                 }
                 is NetworkResult.Loading -> {
-                    binding.layoutPopular.shimmerPoster.root.startShimmerAnimation()
+                    binding.layoutPopular.shimmerPoster.root.startShimmer()
                 }
             }
         }
@@ -95,10 +104,41 @@ class MovieFragment : BaseFragment<FragmentMovieBinding>() {
     }
 
     private fun setupView() {
+//        binding.root.loadSkeleton {
+//            val customShimmer = Shimmer.AlphaHighlightBuilder()
+//                .setDirection(Shimmer.Direction.TOP_TO_BOTTOM)
+//                .build()
+//            shimmer(customShimmer)
+//        }
         binding.layoutPopular.txtCategory.text = getString(R.string.movie_category_popular)
         binding.layoutTopRated.txtCategory.text = getString(R.string.movie_category_toprated)
         binding.layoutNowPlaying.txtCategory.text = getString(R.string.movie_category_nowplaying)
     }
+
+//    private fun setupAdapter(list: ArrayList<ResultsItem>?) {
+//        testAdapter.apply {
+//            setNewInstance(list?.toMutableList())
+//            setOnItemClickListener { _, _, position ->
+//                val item = list?.get(position)
+//                val intent = data.let {
+//                    DetailMovieActivity.newIntent(context, item?.id)
+//                }
+//                startActivity(intent)
+//            }
+//        }
+//
+//    }
+//
+//    private fun setupRecyclerView() {
+//        binding.layoutNowPlaying.apply {
+//            shimmerPoster.root.visibility = GONE
+//            rvPoster.apply {
+//                visibility = VISIBLE
+//                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+//                adapter = testAdapter
+//            }
+//        }
+//    }
 
     private fun setupNowPlaying(list: ArrayList<ResultsItem>?) {
         val nowplayingAdapter = HomeAdapter().apply {

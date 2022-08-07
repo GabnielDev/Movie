@@ -29,7 +29,10 @@ class DetailMovieViewModel @Inject constructor(
     }
 
     private val _trailer = MutableLiveData<NetworkResult<ResponseTrailer>>()
-    val trailer: LiveData<NetworkResult<ResponseTrailer>> = _trailer
+
+        val trailer: LiveData<NetworkResult<ResponseTrailer>> = _trailer
+//    val trailer: LiveData<NetworkResult<ResponseTrailer>>
+//        get() = _trailer
 
     fun getDetailTrailer(movie_id: Int?) = viewModelScope.launch {
         repository.getTrailerMovie(movie_id)

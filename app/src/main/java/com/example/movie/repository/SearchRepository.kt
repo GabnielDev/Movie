@@ -2,9 +2,8 @@ package com.example.movie.repository
 
 import com.example.movie.base.BaseApiResponse
 import com.example.movie.base.NetworkResult
-import com.example.movie.remote.SearchDataSource
+import com.example.movie.sources.SearchDataSource
 import com.example.movie.remote.response.ResponseMovie
-import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

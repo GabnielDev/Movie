@@ -13,6 +13,7 @@ import com.example.movie.databinding.FragmentUpComingBinding
 import com.example.movie.helper.gotoYoutube
 import com.example.movie.helper.showToast
 import com.example.movie.remote.response.ResultsItem
+import com.example.movie.view.fragment.home.HomeAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,13 +22,15 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
     private val viewModel: UpComingViewModel by viewModels()
 
     var page = 1
-    var key: String? = null
+    private var key: String? = null
+
+    private var upComingAdapter = UpComingAdapter()
 
     override val bindingInflater: (LayoutInflater) -> FragmentUpComingBinding
         get() = FragmentUpComingBinding::inflate
 
     override fun initialization() {
-
+        setupRecyclerView()
     }
 
     override fun observeViewModel() {
@@ -37,7 +40,8 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
                 is NetworkResult.Success -> {
                     val data = response.data?.results
                     if (!data.isNullOrEmpty()) {
-                        setupUpcomingAdapter(data)
+                        setupAdapter(data)
+//                        setupUpcomingAdapter(data)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -46,7 +50,7 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
                     }
                 }
                 is NetworkResult.Loading -> {
-                    binding.shimmerUpComing.root.startShimmerAnimation()
+//                    binding.shimmerUpComing.root.startShimmerAnimation()
                 }
             }
         }
@@ -57,7 +61,7 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
                     val data = response.data?.results?.get(0)?.key
                     if (!data.isNullOrEmpty()) {
                         key = data
-                        context?.let { gotoYoutube(it, key) }
+                        gotoYoutube(context, key)
                     }
                 }
                 is NetworkResult.Error -> {
@@ -72,8 +76,8 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
 
     }
 
-    private fun setupUpcomingAdapter(list: ArrayList<ResultsItem>?) {
-        val upComingAdapter = UpComingAdapter().apply {
+    private fun setupAdapter(list: ArrayList<ResultsItem>?) {
+        upComingAdapter.apply {
             setNewInstance(list?.toMutableList())
             addChildClickViewIds(R.id.txtTontonSekarang)
 
@@ -81,9 +85,11 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
                 val item = list?.get(position)
                 val id = item?.id
                 viewModel.getTrailer(id)
-
             }
         }
+    }
+
+    private fun setupRecyclerView() {
         binding.rvUpComing.apply {
             visibility = VISIBLE
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -91,7 +97,6 @@ class UpComingFragment : BaseFragment<FragmentUpComingBinding>() {
         }
         binding.shimmerUpComing.root.visibility = GONE
     }
-
 
 }
 

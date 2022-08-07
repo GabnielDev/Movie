@@ -1,6 +1,6 @@
-package com.example.movie.remote
+package com.example.movie.sources
 
-import com.example.movie.remote.service.MovieServiceInstance
+import com.example.movie.services.MovieServiceInstance
 import javax.inject.Inject
 import javax.inject.Singleton
 

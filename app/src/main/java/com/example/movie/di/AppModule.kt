@@ -4,7 +4,7 @@ import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.movie.BuildConfig
 import com.example.movie.network.AuthInterceptor
-import com.example.movie.remote.service.*
+import com.example.movie.services.*
 import com.example.movie.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -21,9 +21,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
-
-//    @Provides
-//    fun providesBaseUrl() = BASE_URL
 
     @Singleton
     @Provides

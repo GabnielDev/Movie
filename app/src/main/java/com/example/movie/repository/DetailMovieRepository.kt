@@ -2,7 +2,7 @@ package com.example.movie.repository
 
 import com.example.movie.base.BaseApiResponse
 import com.example.movie.base.NetworkResult
-import com.example.movie.remote.MovieDetailDataSource
+import com.example.movie.sources.MovieDetailDataSource
 import com.example.movie.remote.response.ResponseCredits
 import com.example.movie.remote.response.ResponseDetailMovie
 import com.example.movie.remote.response.ResponseTrailer
