@@ -24,6 +24,7 @@ class UpComingViewModel @Inject constructor(
         repository.getUpComingMovie(page)
             .collect {
                 _upComing.value = it
+//
             }
     }
 
