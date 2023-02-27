@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragment.upcoming.UpComingFragment">
+    tools:context=".presentation.upcoming.UpComingFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvUpComing"

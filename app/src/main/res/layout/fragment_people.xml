@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    tools:context=".view.fragment.people.PeopleFragment">
+    tools:context=".presentation.people.PeopleFragment">
 
 
 <!--    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->

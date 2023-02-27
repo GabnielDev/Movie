@@ -18,13 +18,13 @@
         android:theme="@style/Theme.Movie"
         tools:targetApi="31">
         <activity
-            android:name=".view.activity.detailpeople.DetailPeopleActivity"
+            android:name=".presentation.detailpeople.DetailPeopleActivity"
             android:exported="false" />
         <activity
-            android:name=".view.activity.detail.DetailMovieActivity"
+            android:name=".presentation.detailmovie.DetailMovieActivity"
             android:exported="false" />
         <activity
-            android:name=".view.activity.main.MainActivity"
+            android:name=".presentation.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
